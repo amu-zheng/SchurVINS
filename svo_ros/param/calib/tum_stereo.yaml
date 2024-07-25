@@ -1,0 +1,78 @@
+cameras:
+- camera:
+    distortion:
+      parameters:
+        cols: 1
+        rows: 4
+        data: [0.0034823894022493434, 0.0007150348452162257, -0.0020532361418706202, 0.00020293673591811182]
+      type: equidistant
+    image_height: 512
+    image_width: 512
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [190.97847715128717, 190.9733070521226, 254.93170605935475, 256.8974428996504]
+    label: cam0
+    line-delay-nanoseconds: 0
+    type: pinhole
+    mask: fisheye_mask_tum.jpg
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [-0.99952503787, 0.007501918507, -0.029890130316, 0.0455748,
+           0.029615343886, -0.034397360614, -0.99896934537, -0.0711618,
+           -0.008522328212, -0.99938007925, 0.034158851274, -0.0446813,
+      0.0, 0.0, 0.0, 1.0]
+  serial_no: 0
+  calib_date: 0
+  description: /cam0/image_raw
+- camera:
+    distortion:
+      parameters:
+        cols: 1
+        rows: 4
+        data: [0.0034003170790442797, 0.001766278153469831, -0.00266312569781606,
+               0.0003299517423931039]
+      type: equidistant
+    image_height: 512
+    image_width: 512
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [190.44236969414825, 190.4344384721956, 252.59949716835982, 254.91723064636983]
+    label: cam1
+    line-delay-nanoseconds: 0
+    type: pinhole
+    mask: fisheye_mask_tum.jpg
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [-0.999511048498, 0.008104079264, -0.030199136246, -0.0554563,
+           0.030299116377, 0.01251164372, -0.999462566742, -0.06925,
+           -0.007721883029, -0.999888885162, -0.012751072574, -0.0474529,
+      0.0, 0.0, 0.0, 1.0]
+  serial_no: 0
+  calib_date: 0
+  description: /cam1/image_raw
+label: VI-sensor
+
+imu_params:
+  delay_imu_cam: 0.0
+  max_imu_delta_t: 0.01
+  acc_max: 176.0
+  omega_max: 17
+  sigma_omega_c: 0.005
+  sigma_acc_c: 0.01
+  sigma_omega_bias_c: 4.0e-06
+  sigma_acc_bias_c: 0.0002
+  sigma_integration: 0.0
+  g: 9.8082
+  imu_rate: 200.0
+
+imu_initialization:
+  velocity: [0.0, 0.0, 0.0]
+  omega_bias: [0.0, 0.0, 0.0]
+  acc_bias: [0.0, 0.0, 0.0]
+  velocity_sigma: 1.0
+  omega_bias_sigma: 0.005
+  acc_bias_sigma: 0.01

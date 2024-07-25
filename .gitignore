@@ -1,2 +1,4 @@
 .vscode
-.ideal/
+.ideal
+cmake-build*
+imu_traj.txt

@@ -1,8 +1,0 @@
-prefix=/tmp/tmp.EjzChWJKnL/svo_tracker/cmake-build-debug-remote-host/devel
-
-Name: svo_tracker
-Description: Description of svo_tracker
-Version: 0.0.1
-Cflags: -I/tmp/tmp.EjzChWJKnL/svo_tracker/include
-Libs: -L${prefix}/lib -lsvo_tracker
-Requires: roslib glog_catkin cv_bridge eigen_catkin svo_common svo_direct svo_test_utils

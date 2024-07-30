@@ -1,6 +1,10 @@
 project(svo_test_utils)
 cmake_minimum_required(VERSION 2.8.3)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_FLAGS "-g -O0")
+
+
 find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)
 

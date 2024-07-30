@@ -446,6 +446,7 @@ void SvoInterface::inputKeyCallback(const std_msgs::StringConstPtr& key_input)
 
 void SvoInterface::subscribeImu()
 {
+  std::cout << "subscribeImu hit" << std::endl;
   imu_thread_ = std::unique_ptr<std::thread>(
         new std::thread(&SvoInterface::imuLoop, this));
   sleep(3);
@@ -507,8 +508,11 @@ void SvoInterface::monoLoop()
 
 void SvoInterface::stereoLoop()
 {
-  typedef message_filters::sync_policies::ExactTime<sensor_msgs::Image, sensor_msgs::Image> ExactPolicy;
-  typedef message_filters::Synchronizer<ExactPolicy> ExactSync;
+  // typedef message_filters::sync_policies::ExactTime<sensor_msgs::Image, sensor_msgs::Image> ExactPolicy;
+  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> ApproxPolicy;
+
+  // typedef message_filters::Synchronizer<ExactPolicy> ExactSync;
+  typedef message_filters::Synchronizer<ApproxPolicy> ApproxSync;
 
   ros::NodeHandle nh(nh_, "image_thread");
   ros::CallbackQueue queue;
@@ -520,7 +524,7 @@ void SvoInterface::stereoLoop()
   image_transport::ImageTransport it(nh);
   image_transport::SubscriberFilter sub0(it, cam0_topic, 1000, std::string("raw"));
   image_transport::SubscriberFilter sub1(it, cam1_topic, 1000, std::string("raw"));
-  ExactSync sync_sub(ExactPolicy(1000), sub0, sub1);
+  ApproxSync sync_sub(ApproxPolicy(1000), sub0, sub1);
   sync_sub.registerCallback(boost::bind(&svo::SvoInterface::stereoCallback, this, _1, _2));
 
   while(ros::ok() && !quit_)

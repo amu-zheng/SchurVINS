@@ -1,15 +1,19 @@
 project(svo_online_loopclosing)
 cmake_minimum_required(VERSION 2.8.3)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_FLAGS "-g -O0")
+
+
 find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)
-#set(OpenCV_DIR /usr/share/OpenCV)
-find_package(OpenCV 4 REQUIRED)
+set(OpenCV_DIR /usr/share/OpenCV)
+find_package(OpenCV REQUIRED)
 
-if(${OpenCV_VERSION} STREQUAL "4.2.0")
+if(${OpenCV_VERSION} STREQUAL "3.2.0")
   message(STATUS "OpenCV version ${OpenCV_VERSION}")
 else()
-  message(WARNING "OpenCV version ${OpenCV_VERSION}, OpenCV version must be 4.2.0")
+  message(WARNING "OpenCV version ${OpenCV_VERSION}, OpenCV version must be 3.2.0")
 endif()
 
 include(SvoSetup)

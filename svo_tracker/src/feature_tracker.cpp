@@ -67,7 +67,7 @@ size_t FeatureTracker::trackFrameBundle(const FrameBundlePtr& nframe_kp1)
     size_t new_keypoints_counter = 0;    
     for(size_t track_index = 0; track_index < tracks.size(); ++track_index)
     {
-      FeatureTrack& track = tracks.at(track_index);//tracks是该特征点对应的追踪点串:其中active_tracks_  包括n目个FeatureTracks, 每个FeatureTracks包括多个FeatureTrack(特征点个数)
+      FeatureTrack& track = tracks.at(track_index);
       const FeatureRef& ref_observation =
           (options_.klt_template_is_first_observation) ? track.front() : track.back();
 
@@ -76,8 +76,8 @@ size_t FeatureTracker::trackFrameBundle(const FrameBundlePtr& nframe_kp1)
 
       // TODO(cfo): make work for feature coordinates with subpixel reference patch!
       // Currently not a problem because feature detector returns integer pos.
-      Eigen::Vector2i ref_px_level_0 = ref_observation.getPx().cast<int>(); //特征点px坐标
-      Keypoint cur_px_level_0 = track.back().getPx();//将该特征点对应的参考帧s的最后一帧上的  px作为当前帧px初值
+      Eigen::Vector2i ref_px_level_0 = ref_observation.getPx().cast<int>();
+      Keypoint cur_px_level_0 = track.back().getPx();
       bool success = feature_alignment::alignPyr2D(
             ref_pyr, cur_pyr,
             options_.klt_max_level, options_.klt_min_level, options_.klt_patch_sizes,

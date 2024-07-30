@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(svo_msgs)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_FLAGS "-g -O0")
+
+
 # search for everything we need to build the messages, dont forget the message_generation
 find_package(catkin REQUIRED COMPONENTS
   message_generation

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rqt_svo)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_FLAGS "-g -O0")
+
 IF(NOT DEFINED ENV{ARM_ARCHITECTURE})
   find_package(catkin REQUIRED COMPONENTS
     rospy

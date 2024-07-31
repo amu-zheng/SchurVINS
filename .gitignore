@@ -1,4 +1,5 @@
 cmake-build*
 *.idea*
 imu_traj*
+*clion*
 

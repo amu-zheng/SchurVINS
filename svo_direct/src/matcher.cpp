@@ -25,6 +25,9 @@
 #include <svo/direct/feature_alignment.h>
 #include <svo/common/camera.h>
 #include <svo/common/logging.h>
+#include <opencv2/opencv.hpp>
+#include<opencv2/highgui/highgui.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
 
 namespace svo {
 
@@ -164,6 +167,10 @@ Matcher::MatchResult Matcher::findEpipolarMatchDirect(
     const double d_max_inv,
     double& depth)
 {
+  std::cout << "min_depth_inv: " << d_min_inv << '\n'
+          << "mean_depth_inv: " << d_estimate_inv << '\n'
+          << "max_depth_inv: " << d_max_inv  << '\n'
+          << std::endl;
   int zmssd_best = PatchScore::threshold();
 
   // Compute start and end of epipolar line in old_kf for match search, on image plane
@@ -174,6 +181,17 @@ Matcher::MatchResult Matcher::findEpipolarMatchDirect(
   cur_frame.cam()->project3(B, &px_B);
   epi_image_ = px_A - px_B;
 
+  // Debug Code
+  /*{
+    // 参考点
+    cv::Mat test_ref_frame = ref_frame.img_pyr_[0].clone();
+    // 极线
+    cv::Mat test_cur_frame = cur_frame.img_pyr_[0].clone();
+    cv::line(test_cur_frame, cv::Point(px_A[0],px_A[1]),  cv::Point(px_B[0],px_B[1]), cv::Scalar(0,0,255), 10);//红色
+    cv::circle(test_ref_frame,cv::Point(ref_ftr.px[0],ref_ftr.px[1]), 1,  cv::Scalar(0,0,255),10);
+    cv::imwrite("/home/user/svo_ws/test_epi/test_ref_frame.jpg", test_ref_frame);
+    cv::imwrite("/home/user/svo_ws/test_epi/test_cur_frame.jpg", test_cur_frame);
+  }*/
   // Compute affine warp matrix
   warp::getWarpMatrixAffine(
       ref_frame.cam_, cur_frame.cam_, ref_ftr.px, ref_ftr.f,
@@ -206,6 +224,7 @@ Matcher::MatchResult Matcher::findEpipolarMatchDirect(
         patch_with_border_, kPatchSize, patch_);
 
   // Case 1: direct search locally if the epipolar line is too short
+  // std::cout << "epi_length_pyramid_:   " << epi_length_pyramid_ << std::endl;
   if(epi_length_pyramid_ < 2.0)
   {
     px_cur_ = (px_A+px_B)/2.0;
@@ -221,6 +240,8 @@ Matcher::MatchResult Matcher::findEpipolarMatchDirect(
   PatchScore patch_score(patch_); // precompute for reference patch
   BearingVector C = T_cur_ref.getRotation().rotate(ref_ftr.f) + T_cur_ref.getPosition()*d_estimate_inv;
   scanEpipolarLine(cur_frame, A, B, C, patch_score, search_level_, &px_cur_, &zmssd_best);
+
+  // std::cout << "zmssd_best:   " << zmssd_best << "    PatchScore::threshold():  " << PatchScore::threshold() << std::endl;
 
   // check if the best match is good enough
   if(zmssd_best < PatchScore::threshold())

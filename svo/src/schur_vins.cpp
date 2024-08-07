@@ -192,7 +192,7 @@ void SchurVINS::Prediction(double _dt, const Eigen::Vector3d& _acc, const Eigen:
 
     cov.block(0, 0, 15, 15)
         = Phi * cov.block(0, 0, 15, 15) * Phi.transpose() + Phi * G * imu_noise * G.transpose() * Phi.transpose() * _dt;
-
+    // State augmentation
     if (!states_map.empty()) {
         int cov_len = cov.rows();
         cov.block(0, 15, 15, cov_len - 15) = Phi * cov.block(0, 15, 15, cov_len - 15);

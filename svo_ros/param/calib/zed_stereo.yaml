@@ -1,0 +1,84 @@
+label: "Zed"
+id: 412eab8e4058621f7036b5e765dfe812
+cameras:
+- camera:
+    label: cam0
+    id: 54812562fa109c40fe90b29a59dd7798
+    line-delay-nanoseconds: 0
+    image_height: 360
+    image_width: 640
+    type: pinhole
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [332.4368273815492, 331.4208753537845, 326.28707425340497, 181.85717966387168]
+    distortion:
+      type: radial-tangential  
+      parameters:
+        cols: 1
+        rows: 4
+        #data: [0.0, 0.0, 0.0, 0.0]
+        data: [0.04284204796184077, -0.018950319807076753, 0.0027263565239221423, -0.004449957012554617]
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [0.01454289, -0.02176498, 0.99965734, 0.00936051,
+          -0.99977342, -0.01585838, 0.0141993, 0.00305769,
+           0.0155439, -0.99963733, -0.02199067, -0.00698144,
+           0.0, 0.0, 0.0, 1.0]
+- camera:
+    label: cam1
+    id: 54812562fa109c40fe90b29a59dd7723
+    line-delay-nanoseconds: 0
+    image_height: 360
+    image_width: 640
+    type: pinhole
+
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [333.28281779050474, 333.163845952076, 318.9327241669796, 182.11225698395938]
+    distortion:
+      type: radial-tangential  
+      parameters:
+        cols: 1
+        rows: 4
+        #data: [0.0, 0.0, 0.0, 0.0]
+        data: [0.03655959436841766, -0.011153294814877639, 0.003088197380027996, -0.008055040658464963]
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [0.03594706, -0.02422478, 0.99906004, 0.00947322,
+           -0.99922548, -0.01688443, 0.03554361, -0.05818632,
+           0.01600752, -0.99956394, -0.02481296, -0.00608725,
+           0.0, 0.0, 0.0, 1.0]
+
+imu_params:
+  delay_imu_cam: 0.0
+  max_imu_delta_t: 0.01
+  acc_max: 176.0
+  omega_max: 17
+  # sigma_omega_c: 12.0e-4
+  # sigma_acc_c: 8.0e-3:
+  # sigma_omega_bias_c: 0.03
+  # sigma_acc_bias_c: 0.1
+  # sigma_integration: 0.0
+  # g: 9.8082
+  # imu_rate: 800
+
+  sigma_omega_c: 0.004
+  sigma_acc_c: 0.08
+  sigma_omega_bias_c: 2.0e-6
+  sigma_acc_bias_c: 0.00004
+  sigma_integration: 0.0
+  g: 9.81007
+  imu_rate: 200
+
+imu_initialization:
+  velocity: [0.0, 0, 0.0]
+  omega_bias: [0.0, 0, 0.0]
+  acc_bias: [0.0, 0.0, 0.0]
+  velocity_sigma: 2.0
+  omega_bias_sigma: 0.01
+  acc_bias_sigma: 0.1
+

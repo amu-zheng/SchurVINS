@@ -112,9 +112,9 @@ void SchurVINS::AugmentState(const svo::FrameBundle::Ptr frame_bundle) {
     CHECK(old_rows == (15 + states_map.size() * 6 - 6));
     cov.conservativeResize(old_rows + 6, old_cols + 6);
 
-    cov.block(old_rows, 0, 6, old_cols) = cov.block(0, 0, 6, old_cols);
+    cov.block(old_rows, 0, 6, old_cols) = cov.block(0, 0, 6, old_cols); // P_21
     cov.block(0, old_cols, old_rows, 6) = cov.block(0, 0, old_rows, 6);
-    cov.block(old_rows, old_cols, 6, 6) = cov.block<6, 6>(0, 0);
+    cov.block(old_rows, old_cols, 6, 6) = cov.block<6, 6>(0, 0);  // P_22
 }
 
 void SchurVINS::PredictionState(const Eigen::Vector3d& acc, const Eigen::Vector3d& gyro, double dt) {
@@ -222,15 +222,15 @@ void SchurVINS::Solve3() {
               prev_frame_id1 = (++states_map.rbegin())->second->frame_bundle->frames_[1]->id();
     const int max_frame_idx = states_map.rbegin()->second->frame_bundle->getBundleId();
 
-    const int state_len = state_size * 6;
-    const int64_t curr_state_id = curr_state->id;
-    Eigen::MatrixXd Amtx = Eigen::MatrixXd::Zero(state_len, state_len);
-    Eigen::VectorXd Bvct = Eigen::VectorXd::Zero(state_len);
-    Matrix2o3d dr_dpc = Matrix2o3d::Zero();
-    Matrix3o6d dpc_dpos = Matrix3o6d::Zero();
-    Matrix2o6d jx = Matrix2o6d::Zero();
-    Matrix2o3d jf = Matrix2o3d::Zero();
-    Eigen::Vector2d r = Eigen::Vector2d::Zero();
+    const int state_len             = state_size * 6;
+    const int64_t curr_state_id     = curr_state->id;
+    Eigen::MatrixXd Amtx            = Eigen::MatrixXd::Zero(state_len, state_len);
+    Eigen::VectorXd Bvct            = Eigen::VectorXd::Zero(state_len);
+    Matrix2o3d dr_dpc               = Matrix2o3d::Zero();  //  Jij
+    Matrix3o6d dpc_dpos             = Matrix3o6d::Zero();  //  JA
+    Matrix2o6d jx                   = Matrix2o6d::Zero();  //  Jxij
+    Matrix2o3d jf                   = Matrix2o3d::Zero();  //  Jfij
+    Eigen::Vector2d r               = Eigen::Vector2d::Zero();
 
     // compute local points jacobian
     int num_obs = 0;
@@ -340,15 +340,15 @@ void SchurVINS::Solve3() {
             const int pos_bias = state_idx * 6;
             // Amtx.block(0, pos_bias, 6, 6) += blk_ext2pos;                           // ext 2 pos
             // Amtx.block(pos_bias, 0, 6, 6) += blk_ext2pos.transpose();               // pos 2 ext
-            Amtx.block(pos_bias, pos_bias, 6, 6).noalias() += jx.transpose() * jx;  // pos 2 pos
+            Amtx.block(pos_bias, pos_bias, 6, 6).noalias() += jx.transpose() * jx;  // pos 2 pos（C1）
 
             // Bvct.segment(0, 6).noalias() += jext.transpose() * r;       // ext grad
-            Bvct.segment(pos_bias, 6).noalias() += jx.transpose() * r;  // pos grad
+            Bvct.segment(pos_bias, 6).noalias() += jx.transpose() * r;  // pos grad （b1）
 
-            curr_pt->V.noalias() += jf.transpose() * jf;  // pt 2 pt
-            curr_pt->gv.noalias() += jf.transpose() * r;  // pt grad
+            curr_pt->V.noalias() += jf.transpose() * jf;  // pt 2 pt  (C3)
+            curr_pt->gv.noalias() += jf.transpose() * r;  // pt grad  (b2)
             // curr_pt->W.noalias() += jext.transpose() * jf;  // ext 2 pt
-            feature->W.noalias() = jx.transpose() * jf;  // pos 2 pt
+            feature->W.noalias() = jx.transpose() * jf;  // pos 2 pt  (C2)
                                                          // LOG(INFO) << "V:\n" << curr_pt->V;
                                                          // LOG(INFO) << "Vinv:\n" << curr_pt->V.inverse();
                                                          // LOG(INFO) << "gv:\n" << curr_pt->gv.transpose();

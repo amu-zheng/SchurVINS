@@ -91,7 +91,6 @@ void Frame::deleteLandmark(const size_t& feature_index)
   landmark_vec_.at(feature_index) = nullptr;
 }
 
-// TODO(amu)：fix the Error under the TUM_VI dataset using stereo
 void Frame::resizeFeatureStorage(size_t num)
 {
   if(static_cast<size_t>(px_vec_.cols()) < num)

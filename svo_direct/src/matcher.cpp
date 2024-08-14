@@ -167,10 +167,10 @@ Matcher::MatchResult Matcher::findEpipolarMatchDirect(
     const double d_max_inv,
     double& depth)
 {
-  std::cout << "min_depth_inv: " << d_min_inv << '\n'
+  /*std::cout << "min_depth_inv: " << d_min_inv << '\n'
           << "mean_depth_inv: " << d_estimate_inv << '\n'
           << "max_depth_inv: " << d_max_inv  << '\n'
-          << std::endl;
+          << std::endl;*/
   int zmssd_best = PatchScore::threshold();
 
   // Compute start and end of epipolar line in old_kf for match search, on image plane
